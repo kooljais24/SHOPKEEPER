@@ -1,9 +1,8 @@
 from rest_framework import serializers
-from .models import items
+from webapp.models import items
 
 
 class itemsSerializer(serializers.ModelSerializer):
-
-	class Meta:
-		model=items
-		fields='__all__'		
+    class Meta:
+        model = items
+        fields = ('id', 'name', 'price', 'quantity', 'pos')
