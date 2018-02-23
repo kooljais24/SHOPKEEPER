@@ -17,15 +17,39 @@ from rest_framework import status
 from rest_framework import mixins
 from rest_framework import generics
 
-
-
+from django.contrib.auth.models import User
+from webapp.serializers import UserSerializer
+from rest_framework import permissions
+from webapp.permissions import IsOwnerOrReadOnly
 #Using format suffixes gives us URLs that explicitly refer to a given format
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
+
+
+
 
 class itemsList(generics.ListCreateAPIView):
     queryset = items.objects.all()
     serializer_class = itemsSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly) #this lets the other users to have a look on others data but only in readable mode
+    def perform_create(self, serializer):
+		serializer.save(owner=self.request.user)
 
 
 class itemsDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = items.objects.all()
     serializer_class = itemsSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly)
+
+class UserList(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
