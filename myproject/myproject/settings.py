@@ -125,3 +125,45 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+
+REST_FRAMEWORK = {
+'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+
+}
+JWT_AUTH = { 
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
+     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+    #'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=500)
+}
+
+LOGIN_REDIRECT_URL = '/items'
+
+'''
+$ curl -X POST -d "username=mayank&password=mayank1234" http://127.0.0.1:8000/api-token-auth/
+
+
+ curl -X POST -H "Content-Type: application/json" -d '{"username":"mayank","password":"mayank1234"}' http://127.0.0.1:8000/api-token-auth/
+'''
+
+'''
+curl --request POST \
+      --url http://127.0.0.1:8000/jwt-auth/ \
+      --header 'content-type: application/json' \
+      --data '{"username": "mayank", "password": "mayank1234"}'
+
+
+      '''
